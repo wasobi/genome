@@ -12,18 +12,22 @@ all your functions have appropriate docstrings.
 """
 
 """
+Count the kmers of size k
 """
-def count_kmers (k):
+def count_kmers (k,seq):
     kmers = []
-    poss  = 0 # all possible kmers
+    total_kmers  = 0 # all possible kmers
     count = 0 # all observed kmers
 
     # iterate the sequence and find unique substrings in k
     for i in range(len(sequence)):
         while (len(sequence)-k):
-            
-    # s
+
+    # 
     #
+    create_df(kmers)
+    make_graph(kmers,count)
+    complexity(count,total_kmers)
     return
 """
 """
@@ -31,25 +35,37 @@ def create_df ():
     #count_kmers (k)
     return
 """
+Create a graph to show the observed kmers
 """
-def make_graph ():
+def make_graph (kmers):
     return
 """
 Linguistic complexity of the given sequence
 """
-def calc_lc (observed,possible):
+def complexity (observed,possible):
     return (observed/possible)*100
-
+"""
+Testing script for the program
+"""
 def _test ():
     return
-
-def _strip ():
-    return
+"""
+Extract sequence, remove endline characters from file
+"""
+def _strip (file):
+    return sequence
 
 def __main__ ():
     sys.argv()
     file = open(filename)
-    _strip(file)
+    sequence = _strip(file)
+    """
+    print("")
+    print("")
+    print("      ---------------------------------------------------------")
+    k = int(input("       Enter the value for k: "))
+    """
+    count_kmers(k,sequence)
     return
 
 # let's run this
