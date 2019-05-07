@@ -10,3 +10,47 @@ observed.
 7. Create a github repository including a README (in markdown) to submit your work. Be sure that
 all your functions have appropriate docstrings.
 """
+
+"""
+"""
+def count_kmers (k):
+    kmers = []
+    poss  = 0 # all possible kmers
+    count = 0 # all observed kmers
+
+    # iterate the sequence and find unique substrings in k
+    for i in range(len(sequence)):
+        while (len(sequence)-k):
+            
+    # s
+    #
+    return
+"""
+"""
+def create_df ():
+    #count_kmers (k)
+    return
+"""
+"""
+def make_graph ():
+    return
+"""
+Linguistic complexity of the given sequence
+"""
+def calc_lc (observed,possible):
+    return (observed/possible)*100
+
+def _test ():
+    return
+
+def _strip ():
+    return
+
+def __main__ ():
+    sys.argv()
+    file = open(filename)
+    _strip(file)
+    return
+
+# let's run this
+__main__()
