@@ -15,15 +15,21 @@ all your functions have appropriate docstrings.
 Count the kmers of size k
 """
 def count_kmers (k,seq):
-    kmers = {}
+    kmers = []
     total_kmers  = 0 # all possible kmers
     count = 0 # all observed kmers
 
     # for every vale of (1,2, ..., k)
     for i in range(k)
+        k_kmers = []
         # calculate the number of kmers for length k
         for char in seq:
-            
+            # when the length of the subset is equal to the size of the sequence
+            if len(seq)-k == 0:
+                k_kmer[i] =
+            else:
+                #computer
+
     create_df(kmers)
     make_graph(kmers,count)
     complexity(count,total_kmers)
