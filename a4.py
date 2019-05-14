@@ -1,4 +1,4 @@
-#import pandas as pp
+import pandas as pp
 
 def count_kmers (k,genome,length):
     """
@@ -16,21 +16,23 @@ def count_kmers (k,genome,length):
     sequences = []
     count = 0 # all observed kmers
 
-        for i in range(length-k):
-            if length < (i+k):
-                break # exit loop if you are on element lenghth-k
-            # if value of the k is equal to the size of the sequence
-            if length == k:
-                sequences.append(genome)
-                k_kmers = (1,sequence)
-                return k_kmers
-            # if k is smaller than the length of the sequence
-            else:
-                seq = genome[i:i+k]
-                if seq not in sequences:
-                    sequences.append(seq)
+    for i in range(length):
+        if length < (i+k):
+            break # exit loop if you are on element lenghth-k
+        # if value of the k is equal to the size of the sequence
+        if length == k:
+            sequences.append(genome)
+            k_kmers = (1,sequences)
+            return k_kmers
+        # if k is smaller than the length of the sequence
+        else:
+            seq = genome[i:i+k]
+            if seq not in sequences:
+                sequences.append(seq)
             count += 1
-        k_kmers = (count,sequences)
+    if k == 1:
+        count = 4
+    k_kmers = (count,sequences)
     return k_kmers
 
 
@@ -50,11 +52,11 @@ def create_df (k,genome):
     kmers = {}
 
     # for every value of k inclusive (1,2, ..., k)
-    for i in range(k):
-        k_kmers = count_kmers(k,seq,length)
+    for i in range(1,k+1):
+        k_kmers = count_kmers(i,genome,length)
         kmers[i] = k_kmers
 
-    kmers_df = pd.DataFrame.from_dict(kmers,orient = 'index', columns = [''])
+    kmers_df = pp.DataFrame.from_dict(kmers,orient = 'index')
     return kmers
 
 def make_graph (kmers,count):
@@ -87,7 +89,17 @@ def complexity (kmers):
         possible += kmers[k_kmer][0]
     return int(observed/possible)*100,observed,possible
 
+def _extract_sequence (file):
+    """
+    Summary -- Testing script for the program
 
+    Description --
+
+    Parameters:
+
+    Returns -- Nothing
+    """
+    return sequence
 def _test ():
     """
     Summary -- Testing script for the program
@@ -103,25 +115,33 @@ def _test ():
     observed = 16
     possible = 16
     complexity = 100
+
+    k = 9
+    i = 1
+    ans = {1:(4, ['A', 'T', 'G']),2:(8, ['AT', 'TT', 'TG', 'GG', 'GA']),3:(7, ['ATT', 'TTT', 'TTG', 'TGG', 'GGA', 'GAT']),4:(6, ['ATTT', 'TTTG', 'TTGG', 'TGGA', 'GGAT', 'GATT']),5:(5, ['ATTTG', 'TTTGG', 'TTGGA', 'TGGAT', 'GGATT']),6:(4, ['ATTTGG', 'TTTGGA', 'TTGGAT', 'TGGATT']),7:(3, ['ATTTGGA', 'TTTGGAT', 'TTGGATT']),8:(2, ['ATTTGGAT', 'TTTGGATT']),9:(1, ['ATTTGGATT'])}
+    for i in range(k):
+        if i != 0:
+            print("k: ",i)
+            count_kmers(i,'ATTTGGATT',9)
+            assert (ans[i]==count_kmers(i,'ATTTGGATT',9))
     return
 
 def __main__ ():
     """
-    Summary -- Takes a file from the commandline
+    Summary -- Output the calculations for the linguistic complexity
 
-    Description --
+    Description -- Takes a file from the commandline and a value for k to pass into functions that will calculate the lingustic complexity and create a graph.
 
-    Parameters:
+    Parameters: None
 
     Returns -- Nothing
+    line.strip(file,":")
     """
-    sys.argv()
-    file = open(filename)
-    sequence = line.strip(file,":")
-
-    assert (len(sequence) > 0) # do not begin computation if the file was empty
+    file = sys.argv[1]
+    genome = _extract_sequence(file)
+    assert (len(genome) > 0) # do not begin computation if the file was empty
     k = int(input("       Enter the value for k: "))
-    assert (k > len_sequence) # if k is greater, cannot compute the complexity
+    assert (k > len(genome)) # if k is greater, cannot compute the complexity
 
     kmers = create_df(k,genome)
     make_graph(kmers)
