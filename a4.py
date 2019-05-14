@@ -32,8 +32,7 @@ def count_kmers (k,genome,length):
             count += 1
     if k == 1:
         count = 4
-    k_kmers = (count,sequences)
-    return k_kmers
+    return (count,sequences)
 
 
 def create_df (k,genome):
