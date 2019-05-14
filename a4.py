@@ -1,18 +1,4 @@
-import pandas as pp
-import math
-
-"""
-1. Define a function to count kmers of size k, where k is specified as an argument.
-2. Define a function to create a pandas data frame containing all possible k and the associated
-number of observed and expected kmers (see above table).
-3. Define a function to produce a graph from the data frame of the proportion of each kmer
-observed.
-4. Define a function to calculate linguistic complexity.
-5. Write a script to thoroughly test each of your functions.
-6. Use the main function to read in your sequence data and output results.
-7. Create a github repository including a README (in markdown) to submit your work. Be sure that
-all your functions have appropriate docstrings.
-"""
+#import pandas as pp
 
 def count_kmers (k,genome,length):
     """
@@ -58,7 +44,7 @@ def create_df (k,genome):
         - k: given as an agrument from the command line, size of the the subsets
         - genome: sequence given as an argument from the command line
 
-    Returns -- Nothing
+    Returns -- Complete dictionary of kmers
     """
     length = len(genome)
     kmers = {}
@@ -69,7 +55,7 @@ def create_df (k,genome):
         kmers[i] = k_kmers
 
     kmers_df = pd.DataFrame.from_dict(kmers,orient = 'index', columns = [''])
-    return observed,possible
+    return kmers
 
 def make_graph (kmers,count):
     """
@@ -99,7 +85,7 @@ def complexity (kmers):
     for k_kmer in kmers:
         observed += len(kmers[k_kmer][1])
         possible += kmers[k_kmer][0]
-    return int(observed/possible)*100
+    return int(observed/possible)*100,observed,possible
 
 
 def _test ():
@@ -139,10 +125,12 @@ def __main__ ():
 
     kmers = create_df(k,genome)
     make_graph(kmers)
-    complexity = complexity(kmers)
+    complexity,observed,possible = complexity(kmers)
 
+    print("Total observed: ", complexity)
+    print("Total no. of kmers possible: ", complexity)
     print("---------------------------------------------------------")
-    print("Complexity of the genome is %", int(observed/possible)*100)
+    print("Complexity of the genome is %", complexity)
     print("---------------------------------------------------------")
     return
 
