@@ -22,8 +22,7 @@ def count_kmers (k,genome,length):
         # if value of the k is equal to the size of the sequence
         if length == k:
             sequences.append(genome)
-            k_kmers = (1,sequences)
-            return k_kmers
+            return (1,sequences)
         # if k is smaller than the length of the sequence
         else:
             seq = genome[i:i+k]
