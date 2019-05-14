@@ -1,4 +1,4 @@
-# genome
+# Genome
 ## Description
 Python script that calculates the linguistic complexity for a given genome sequence using a value of k that is specified by the user.
 ## Background
