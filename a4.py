@@ -25,11 +25,10 @@ def count_kmers (k,genome,length):
         - genome: sequence given by the user through the command line
         - length: length of the genome sequence
 
-    Returns -- Nothing A dictionary of the unique kmers that were found for the specifed k. The key is the total number of kmers that are possible
+    Returns -- A tuple of the unique kmers that were found for the specifed k. The first value of the tuple is the total possible kmers for size k and the second value is a list of unique kmers of size k. The number of observed kmers is obtained by taking the length of this list.
     """
     sequences = []
     count = 0 # all observed kmers
-    k_kmers = (count,sequences) # empty tuple
 
         for i in range(length-k):
             if length < (i+k):
@@ -44,7 +43,8 @@ def count_kmers (k,genome,length):
                 seq = genome[i:i+k]
                 if seq not in sequences:
                     sequences.append(seq)
-            count += 1 # incremented at every iteration
+            count += 1
+        k_kmers = (count,sequences)
     return k_kmers
 
 
