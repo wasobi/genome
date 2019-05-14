@@ -8,3 +8,14 @@ Write a script that, when run using the command line, outputs the linguistic com
 
 
 As an example, consider the sequence ATTTGGATT. From the following table you can see that the linguistic complexity is 35 / 40 = 0.875. Note that the possible number of kmers (usually 4^k) is limited by the length of the sequence (i.e. the number of possible k-mers of length 9 in the sequence is 1, not 4^9).
+## Instructions
+1. Define a function to count kmers of size k, where k is specified as an argument.
+2. Define a function to create a pandas data frame containing all possible k and the associated
+number of observed and expected kmers (see above table).
+3. Define a function to produce a graph from the data frame of the proportion of each kmer
+observed.
+4. Define a function to calculate linguistic complexity.
+5. Write a script to thoroughly test each of your functions.
+6. Use the main function to read in your sequence data and output results.
+7. Create a github repository including a README (in markdown) to submit your work. Be sure that
+all your functions have appropriate docstrings.
