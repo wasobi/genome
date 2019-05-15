@@ -91,39 +91,54 @@ def complexity (kmers):
         possible += kmers[k_kmer][0]
     return (observed/possible),observed,possible
 
-def _test ():
+def _test (arg):
     """
-    Summary -- Testing script for the program
+    Summary -- Test function
 
-    Description --
+    Description -- Test various inputs to check for errors in the code
 
     Parameters:
+        - arg: user specified argument that chooses which test to run
 
     Returns -- Nothing
     """
-    k = 6
-    kmers = {1:(4,['A','T','C','G']),2:(5,['AA','AT','TG','GC','CT']),
-             3:(4,['AAT','ATG','TGC','GCT']),4:(3,['AATG','ATGC','TGCT']),
-             5:(2,['AATGC','ATGCT']),6:(1,['AATGCT'])}
-    observed = 16
-    possible = 16
-    complexity = 100
-
-    k = 9
-    i = 1
-    ans = {1:(4, ['A', 'T', 'G']),2:(8, ['AT', 'TT', 'TG', 'GG', 'GA']),
-           3:(7, ['ATT', 'TTT', 'TTG', 'TGG', 'GGA', 'GAT']),
-           4:(6, ['ATTT', 'TTTG', 'TTGG', 'TGGA', 'GGAT', 'GATT']),
-           5:(5, ['ATTTG', 'TTTGG', 'TTGGA', 'TGGAT', 'GGATT']),
-           6:(4, ['ATTTGG', 'TTTGGA', 'TTGGAT', 'TGGATT']),
-           7:(3, ['ATTTGGA', 'TTTGGAT', 'TTGGATT']),
-           8:(2, ['ATTTGGAT', 'TTTGGATT']),9:(1, ['ATTTGGATT'])}
-    for i in range(k):
-        if i != 0:
-            print("k: ",i)
-            count_kmers(i,'ATTTGGATT',9)
-            assert (ans[i]==count_kmers(i,'ATTTGGATT',9))
-    return
+    if arg == 1:
+        k = 6
+        seq = 'AATGCT'
+        observed = 16
+        possible = 16
+        complexity = 100
+        ans = {1:(4,['A','T','C','G']),2:(5,['AA','AT','TG','GC','CT']),
+                 3:(4,['AAT','ATG','TGC','GCT']),4:(3,['AATG','ATGC','TGCT']),
+                 5:(2,['AATGC','ATGCT']),6:(1,['AATGCT'])}
+        for i in range(1,k+1):
+            if i != 0:
+                print("k: ",i)
+                count_kmers(i,seq,k)
+                assert (ans[i]==count_kmers(i,seq,k))
+        assert(ans == create_df(k,seq))
+        assert(complexity(ans)==complexity,observed,possible)
+        return
+    elif arg == 2:
+        k = 9
+        ans = {1:(4, ['A', 'T', 'G']),2:(8, ['AT', 'TT', 'TG', 'GG', 'GA']),
+               3:(7, ['ATT', 'TTT', 'TTG', 'TGG', 'GGA', 'GAT']),
+               4:(6, ['ATTT', 'TTTG', 'TTGG', 'TGGA', 'GGAT', 'GATT']),
+               5:(5, ['ATTTG', 'TTTGG', 'TTGGA', 'TGGAT', 'GGATT']),
+               6:(4, ['ATTTGG', 'TTTGGA', 'TTGGAT', 'TGGATT']),
+               7:(3, ['ATTTGGA', 'TTTGGAT', 'TTGGATT']),
+               8:(2, ['ATTTGGAT', 'TTTGGATT']),9:(1, ['ATTTGGATT'])}
+        for i in range(1,k+1):
+            if i != 0:
+                print("k: ",i)
+                count_kmers(i,'ATTTGGATT',9)
+                assert (ans[i]==count_kmers(i,'ATTTGGATT',9))
+        return
+    else:
+        k = 4
+        seq = ''
+        sequences = create_df(k,seq)
+        return
 
 def main():
     """
@@ -142,8 +157,6 @@ def main():
     assert (len(genome) > 0) # do not begin computation if the file was empty
 
     k = len(genome)
-    print(k)
-    print(genome)
     kmers = create_df(k,genome)
     # make_graph(kmers)
     liguistic_complexity,observed,possible = complexity(kmers)
