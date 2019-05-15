@@ -100,7 +100,7 @@ def _test (arg):
     Parameters:
         - arg: user specified argument that chooses which test to run
 
-    Returns -- Nothing
+    Returns -- If the test is executely corrected, the function returns a string notifying the user
     """
     if arg == 1:
         k = 6
@@ -118,7 +118,7 @@ def _test (arg):
                 assert (ans[i]==count_kmers(i,seq,k))
         assert(ans == create_df(k,seq))
         assert(complexity(ans)==complexity,observed,possible)
-        return
+        return print("Passes test 1")
     elif arg == 2:
         k = 9
         ans = {1:(4, ['A', 'T', 'G']),2:(8, ['AT', 'TT', 'TG', 'GG', 'GA']),
@@ -133,12 +133,12 @@ def _test (arg):
                 print("k: ",i)
                 count_kmers(i,'ATTTGGATT',9)
                 assert (ans[i]==count_kmers(i,'ATTTGGATT',9))
-        return
+        return print("Passes test 2")
     else:
         k = 4
         seq = ''
         sequences = create_df(k,seq)
-        return
+        return print("Passes test 3")
 
 def main():
     """
