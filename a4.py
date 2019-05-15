@@ -1,4 +1,5 @@
 import pandas as pp
+import plotnine as pn
 import sys
 
 def count_kmers (k,genome,length):
@@ -58,9 +59,9 @@ def create_df (k,genome):
         kmers[i] = k_kmers
 
     kmers_df = pp.DataFrame.from_dict(kmers,orient = 'index')
-    return kmers
+    return kmers_df,kmers
 
-def make_graph (kmers,count):
+def make_graph(kmers_df,observed,possible):
     """
     Summary -- Create a graph to show the observed kmers
 
@@ -70,6 +71,14 @@ def make_graph (kmers,count):
 
     Returns -- Nothing
     """
+    plot = (pn.ggplot(data=kmers_df,mapping=pn.aes(x='observed kmers',y='total kmers possible'))
+    + pn.geom_boxplot())
+
+    graph = plot.draw()
+    graph.set_xlabel("Observed kmers")
+    graph.tick_params(labelsize=16, pad=8)
+    graph.set_title('Scatter plot of weight versus hindfoot length', fontsize=15)
+    graph.show()
     return
 
 def complexity (kmers):
@@ -91,6 +100,7 @@ def complexity (kmers):
         possible += kmers[k_kmer][0]
     return (observed/possible),observed,possible
 
+
 def _test (arg):
     """
     Summary -- Test function
@@ -101,6 +111,7 @@ def _test (arg):
         - arg: user specified argument that chooses which test to run
 
     Returns -- If the test is executely corrected, the function returns a string notifying the user
+    """
     """
     if arg == 1:
         k = 6
@@ -139,7 +150,7 @@ def _test (arg):
         seq = ''
         sequences = create_df(k,seq)
         return print("Passes test 3")
-
+    """
 def main():
     """
     Summary -- Output the calculations for the linguistic complexity
@@ -157,9 +168,9 @@ def main():
     assert (len(genome) > 0) # do not begin computation if the file was empty
 
     k = len(genome)
-    kmers = create_df(k,genome)
-    # make_graph(kmers)
+    kmers_df,kmers = create_df(k,genome)
     liguistic_complexity,observed,possible = complexity(kmers)
+    make_graph(kmers_df,observed,possible)
 
     print("---------------------------------------------------------")
     print("File: ", sys.argv[1])
