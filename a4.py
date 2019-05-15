@@ -45,17 +45,16 @@ def create_df (k,genome):
     for values of k {1,...,k} in a given genome sequence.
 
     Parameters:
-        - k: given as an agrument from the command line, size of the the subsets
+        - k:  maximum size of the the subsets in the genome sequence
         - genome: sequence given as an argument from the command line
 
     Returns -- Complete dictionary of kmers
     """
-    length = len(genome)
     kmers = {}
 
     # for every value of k inclusive (1,2, ..., k)
     for i in range(1,k+1):
-        k_kmers = count_kmers(i,genome,length)
+        k_kmers = count_kmers(i,genome,k)
         kmers[i] = k_kmers
 
     kmers_df = pp.DataFrame.from_dict(kmers,orient = 'index')
@@ -90,7 +89,7 @@ def complexity (kmers):
     for k_kmer in kmers:
         observed += len(kmers[k_kmer][1])
         possible += kmers[k_kmer][0]
-    return (observed/possible)*100,observed,possible
+    return (observed/possible),observed,possible
 
 def _test ():
     """
@@ -126,7 +125,7 @@ def _test ():
             assert (ans[i]==count_kmers(i,'ATTTGGATT',9))
     return
 
-def __main__ ():
+def main():
     """
     Summary -- Output the calculations for the linguistic complexity
 
@@ -137,29 +136,26 @@ def __main__ ():
 
     Returns -- Nothing
     """
+    assert (len(sys.argv) != 1), 'Invalid Input: Accepts 1 command line argument.\n usage: a4.py -i <inputfile>'
     with open(sys.argv[1], 'r') as file:
         genome = file.read().replace('\n', '')
-    # check file
     assert (len(genome) > 0) # do not begin computation if the file was empty
 
-    k = int(sys.argv[2])
-    assert (k+1 >= len(genome)) # if k is greater, cannot compute the complexity
-    assert (len(sys.argv) < 1), 'Too few arguments. Please enter a file name and your desired value for k.'
-    assert (len(sys.argv) > 2), 'Too many arguments. Please enter a file name and your desired value for k.'
-
+    k = len(genome)
+    print(k)
+    print(genome)
     kmers = create_df(k,genome)
     # make_graph(kmers)
     liguistic_complexity,observed,possible = complexity(kmers)
 
     print("---------------------------------------------------------")
     print("File: ", sys.argv[1])
-    print("k: ", k)
-    print("Total observed: ", observed)
+    print("Total no. of kmers observed: ", observed)
     print("Total no. of kmers possible: ", possible)
     print("---------------------------------------------------------")
-    print("Complexity of the genome is %", liguistic_complexity)
+    print("Complexity of the genome is ", liguistic_complexity)
     print("---------------------------------------------------------")
     return
 
 # let's run this
-__main__()
+main()
