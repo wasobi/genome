@@ -1,8 +1,8 @@
 import pandas as pp
-import plotnine as pn
 import sys
 
-def count_kmers (k,genome,length):
+
+def count_kmers(k,genome,length):
     """
     Summary -- Count the kmers of size k in a given sequence
 
@@ -18,27 +18,27 @@ def count_kmers (k,genome,length):
     specifed k. The first value of the tuple is the total possible kmers for size k and the second value is a list of unique kmers of size k. The number of observed kmers is obtained by taking the length of this list.
     """
     sequences = []
-    count = 0 # all observed kmers
+    count = 0  # all observed kmers
 
     for i in range(length):
-        if length < (i+k):
-            break # exit loop if you are on element lenghth-k
+        if length < (i + k):
+            break  # exit loop if you are on element length-k
         # if value of the k is equal to the size of the sequence
         if length == k:
             sequences.append(genome)
-            return (1,sequences)
+            return (1, sequences)
         # if k is smaller than the length of the sequence
         else:
-            seq = genome[i:i+k]
+            seq = genome[i:i + k]
             if seq not in sequences:
                 sequences.append(seq)
             count += 1
     if k == 1:
         count = 4
-    return (count,sequences)
+    return count,sequences
 
 
-def create_df (k,genome):
+def create_df(k,genome):
     """
     Summary -- Create a data frame containing all kmers
 
@@ -52,16 +52,19 @@ def create_df (k,genome):
     Returns -- Complete dictionary of kmers
     """
     kmers = {}
+    length = len(genome)
 
     # for every value of k inclusive (1,2, ..., k)
-    for i in range(1,k+1):
-        k_kmers = count_kmers(i,genome,k)
+    for i in range(1, k + 1):
+        k_kmers = count_kmers(i, genome, length)
         kmers[i] = k_kmers
 
-    kmers_df = pp.DataFrame.from_dict(kmers,orient = 'index')
-    return kmers_df,kmers
+    kmers_df = pp.DataFrame.from_dict(kmers, orient='index')
+    #make_graph(kmers_df)
+    return kmers
 
-def make_graph(kmers_df,observed,possible):
+
+def make_graph(kmers_df):
     """
     Summary -- Create a graph to show the observed kmers
 
@@ -71,17 +74,15 @@ def make_graph(kmers_df,observed,possible):
 
     Returns -- Nothing
     """
-    plot = (pn.ggplot(data=kmers_df,mapping=pn.aes(x='observed kmers',y='total kmers possible'))
-    + pn.geom_boxplot())
-
-    graph = plot.draw()
-    graph.set_xlabel("Observed kmers")
-    graph.tick_params(labelsize=16, pad=8)
-    graph.set_title('Scatter plot of weight versus hindfoot length', fontsize=15)
-    graph.show()
+    graph = kmers_df[[k_kmers[0], k_kmers[1]]] \
+        .plot(kind='bar', title='Observed kmers vs Possible kmers', legend=True)
+    kmer_graph.set_xlabel("value of K")
+    kmer_graph.set_ylabel("Count")
+    plt.show()
     return
 
-def complexity (kmers):
+
+def complexity(kmers):
     """
     Summary -- Linguistic complexity of the given sequence
 
@@ -95,13 +96,13 @@ def complexity (kmers):
     """
     observed = 0
     possible = 0
-    for k_kmer in kmers:
-        observed += len(kmers[k_kmer][1])
-        possible += kmers[k_kmer][0]
-    return (observed/possible),observed,possible
+    for kmer in kmers:
+        observed += len(kmers[kmer][1])
+        possible += kmers[kmer][0]
+    return observed/possible
 
 
-def _test (arg):
+def _test(arg):
     """
     Summary -- Test function
 
@@ -112,26 +113,24 @@ def _test (arg):
 
     Returns -- If the test is executely corrected, the function returns a string notifying the user
     """
-    """
     if arg == 1:
         k = 6
         seq = 'AATGCT'
-        observed = 16
-        possible = 16
-        complexity = 100
+        lc = 100
         ans = {1:(4,['A','T','C','G']),2:(5,['AA','AT','TG','GC','CT']),
                  3:(4,['AAT','ATG','TGC','GCT']),4:(3,['AATG','ATGC','TGCT']),
                  5:(2,['AATGC','ATGCT']),6:(1,['AATGCT'])}
         for i in range(1,k+1):
             if i != 0:
                 print("k: ",i)
-                count_kmers(i,seq,k)
-                assert (ans[i]==count_kmers(i,seq,k))
-        assert(ans == create_df(k,seq))
-        assert(complexity(ans)==complexity,observed,possible)
+                count_kmers(i, seq, k)
+                assert (ans[i] == count_kmers(i, seq, k))
+        assert(ans == create_df(k, seq))
+        assert(complexity(ans) == lc)
         return print("Passes test 1")
     elif arg == 2:
         k = 9
+        seq = 'ATTTGGATT'
         ans = {1:(4, ['A', 'T', 'G']),2:(8, ['AT', 'TT', 'TG', 'GG', 'GA']),
                3:(7, ['ATT', 'TTT', 'TTG', 'TGG', 'GGA', 'GAT']),
                4:(6, ['ATTT', 'TTTG', 'TTGG', 'TGGA', 'GGAT', 'GATT']),
@@ -142,15 +141,19 @@ def _test (arg):
         for i in range(1,k+1):
             if i != 0:
                 print("k: ",i)
-                count_kmers(i,'ATTTGGATT',9)
-                assert (ans[i]==count_kmers(i,'ATTTGGATT',9))
+                count_kmers(i, seq, 9)
+                assert (ans[i] == count_kmers(i, seq, 9))
         return print("Passes test 2")
     else:
         k = 4
+        seq = 'AAAAAA'
+        sequences = create_df(k, seq)
+        print(sequences)
+        k = 4
         seq = ''
-        sequences = create_df(k,seq)
+        sequences = create_df(k, seq)
         return print("Passes test 3")
-    """
+
 def main():
     """
     Summary -- Output the calculations for the linguistic complexity
@@ -165,21 +168,19 @@ def main():
     assert (len(sys.argv) != 1), 'Invalid Input: Accepts 1 command line argument.\n usage: a4.py -i <inputfile>'
     with open(sys.argv[1], 'r') as file:
         genome = file.read().replace('\n', '')
-    assert (len(genome) > 0) # do not begin computation if the file was empty
+    assert (len(genome) > 0), 'File was empty'
 
-    k = len(genome)
-    kmers_df,kmers = create_df(k,genome)
-    liguistic_complexity,observed,possible = complexity(kmers)
-    make_graph(kmers_df,observed,possible)
+    k = int(input("       Enter the value for k: "))
+    kmers = create_df(k, genome)
+    linguistic_complexity = complexity(kmers)
 
-    print("---------------------------------------------------------")
+    print("--------------------------------------------------------------")
     print("File: ", sys.argv[1])
-    print("Total no. of kmers observed: ", observed)
-    print("Total no. of kmers possible: ", possible)
-    print("---------------------------------------------------------")
-    print("Complexity of the genome is ", liguistic_complexity)
-    print("---------------------------------------------------------")
+    print("--------------------------------------------------------------")
+    print("Complexity of the genome is ", linguistic_complexity)
+    print("--------------------------------------------------------------")
     return
+
 
 # let's run this
 main()
